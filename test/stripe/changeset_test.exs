@@ -35,7 +35,7 @@ defmodule Stripe.ChangesetTest do
     managed: [:create, :retrieve],
     shipping: %{
       address: %{
-        city: [:city, :retrieve, :update]
+        city: [:create, :retrieve, :update]
       }
     }
   }
