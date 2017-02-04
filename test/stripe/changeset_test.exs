@@ -23,7 +23,15 @@ defmodule Stripe.ChangesetTest do
       address: %{
         city: "Chicago"
       }
-    }
+    },
+    cards: [
+      %{
+        number: "1234"
+      },
+      %{
+        number: "7890"
+      }
+    ]
   }
 
   @schema %{
@@ -37,7 +45,12 @@ defmodule Stripe.ChangesetTest do
       address: %{
         city: [:create, :retrieve, :update]
       }
-    }
+    },
+    cards: [
+      %{
+        number: [:create, :retrieve, :update]
+      }
+    ]
   }
 
   @expected_map %{
@@ -49,7 +62,15 @@ defmodule Stripe.ChangesetTest do
       address: %{
         city: "Chicago"
       }
-    }
+    },
+    cards: [
+      %{
+        number: "1234"
+      },
+      %{
+        number: "7890"
+      }
+    ]
   }
 
   test "works for JSON" do
