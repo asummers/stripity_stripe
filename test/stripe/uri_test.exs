@@ -34,5 +34,7 @@ defmodule Stripe.UriTest do
     assert Stripe.URI.encode_query(%{a: "poll:146%"}) == "a=poll%3A146%25"
     assert Stripe.URI.encode_query(%{a: "/\n+/ゆ"}) == "a=%2F%0A%2B%2F%E3%82%86"
     assert Stripe.URI.encode_query(%{a: "/\n+/ゆ"}) == "a=%2F%0A%2B%2F%E3%82%86"
+
+    assert Stripe.URI.encode_query(%{a: %{b: [%{c: 1}]}})
   end
 end
