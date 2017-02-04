@@ -18,6 +18,11 @@ defmodule Stripe.ChangesetTest do
     legal_entity: %{
       ssn_last_4: "1234",
       ssn_last_4_provided: true
+    },
+    shipping: %{
+      address: %{
+        city: "Chicago"
+      }
     }
   }
 
@@ -27,13 +32,23 @@ defmodule Stripe.ChangesetTest do
     legal_entity: %{
       ssn_last_4: [:create, :update]
     },
-    managed: [:create, :retrieve]
+    managed: [:create, :retrieve],
+    shipping: %{
+      address: %{
+        city: [:city, :retrieve, :update]
+      }
+    }
   }
 
   @expected_map %{
     external_account: "btok_123",
     legal_entity: %{
       ssn_last_4: "1234"
+    },
+    shipping: %{
+      address: %{
+        city: "Chicago"
+      }
     }
   }
 
