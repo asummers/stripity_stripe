@@ -89,6 +89,8 @@ defmodule Stripe.Request do
             end
 
           case retrieve_many.(opts_list) do
+            # Unfortunately we have to raise here to break out of Stream.
+            # But this can easily be rescued and error tuple-ized.
             {:error, error} -> raise error
             {:ok, false, results} -> {results, false}
             {:ok, true, results} ->
