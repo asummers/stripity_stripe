@@ -26,6 +26,16 @@ defmodule Stripe.Request do
     |> handle_result(module)
   end
 
+  @spec retrieve_many(String.t, module, Keyword.t) :: {:ok, boolean, [struct]} | {:error, Stripe.api_error_struct}
+  def retrieve_many(endpoint, module, opts) do
+    case Stripe.request(:get, endpoint, %{}, %{}, opts) do
+      {:error, error} -> {:error, error}
+      {:ok, %{"data" => data, "has_more" => has_more}} ->
+        results = Enum.map(data, &Converter.stripe_map_to_struct(module, &1))
+        {:ok, has_more, results}
+    end
+  end
+
   @spec retrieve_file_upload(String.t, module, Keyword.t) :: {:ok, struct} | {:error, Stripe.api_error_struct}
   def retrieve_file_upload(endpoint, module, opts) do
     %{}
@@ -48,8 +58,41 @@ defmodule Stripe.Request do
     |> handle_result
   end
 
-  def handle_result(result, module \\ nil)
-  def handle_result({:ok, _}, nil), do: :ok
-  def handle_result({:ok, result = %{}}, module), do: {:ok, Converter.stripe_map_to_struct(module, result)}
-  def handle_result({:error, error}, _), do: {:error, error}
+  @spec stream(function, Keyword.t) :: Enumerable.t
+  def stream(retrieve_many, opts) do
+    initial_opts = Keyword.take(opts, [:starting_after, :ending_before])
+    ongoing_opts = Keyword.take(opts, [:ending_before])
+
+    Stream.resource(
+      fn -> nil end,
+      fn
+        false -> {:halt, :ok}
+        starting_after ->
+          opts_list =
+            if is_nil(starting_after) do
+              initial_opts
+            else
+              Keyword.put(ongoing_opts, :starting_after, starting_after)
+            end
+
+          case retrieve_many.(opts_list) do
+            {:error, error} -> {:halt, error}
+            {:ok, false, results} -> {results, false}
+            {:ok, true, results} ->
+              last_result_id =
+                results
+                |> List.last
+                |> Map.fetch!(:id)
+
+              {results, last_result_id}
+          end
+      end,
+      fn _ -> :ok
+    end)
+  end
+
+  defp handle_result(result, module \\ nil)
+  defp handle_result({:ok, _}, nil), do: :ok
+  defp handle_result({:ok, result = %{}}, module), do: {:ok, Converter.stripe_map_to_struct(module, result)}
+  defp handle_result({:error, error}, _), do: {:error, error}
 end
