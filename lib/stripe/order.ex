@@ -135,4 +135,14 @@ defmodule Stripe.Order do
     Stripe.Request.delete(endpoint, opts)
   end
 
+  @payment_schema [
+    customer: [:create, :retrieve, :update],
+    source: [:create, :retrieve, :update]
+  ]
+
+  def pay(id, payment_info, opts \\ []) do
+    endpoint = @plural_endpoint <> "/" id <> "/pay"
+    Stripe.Request.create(@plural_endpoint, payment_info, @payment_schema, __MODULE__, opts)
+  end
+
 end
