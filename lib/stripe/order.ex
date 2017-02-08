@@ -142,7 +142,7 @@ defmodule Stripe.Order do
 
   def pay(id, payment_info, opts \\ []) do
     endpoint = @plural_endpoint <> "/" <> id <> "/pay"
-    Stripe.Request.create(@plural_endpoint, payment_info, @payment_schema, __MODULE__, opts)
+    Stripe.Request.create(endpoint, payment_info, @payment_schema, __MODULE__, opts)
   end
 
 end
