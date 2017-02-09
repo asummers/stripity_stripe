@@ -69,7 +69,7 @@ defmodule Stripe.SKU do
     Stripe.Request.retrieve(endpoint, __MODULE__, opts)
   end
 
-  @spec retrieve_many(source, String.t, Keyword.t) :: {:ok, boolean, [t]} | {:error, Stripe.api_error_struct}
+  @spec retrieve_many(Keyword.t) :: {:ok, boolean, [t]} | {:error, Stripe.api_error_struct}
   def retrieve_many(opts \\ []) do
     query =
       %{object: "sku"}
@@ -81,8 +81,8 @@ defmodule Stripe.SKU do
     Stripe.Request.retrieve_many(endpoint, __MODULE__, opts)
   end
 
-  @spec retrieve_all(source, String.t, Keyword.t) :: {:ok, [t]} | {:error, Stripe.api_error_struct}
-  def retrieve_all(owner_type, owner_id, opts \\ []) do
+  @spec retrieve_all(Keyword.t) :: {:ok, [t]} | {:error, Stripe.api_error_struct}
+  def retrieve_all(opts \\ []) do
     Stripe.Request.retrieve_all(fn opts_list -> retrieve_many(opts_list) end, opts)
   end
 
