@@ -74,7 +74,7 @@ defmodule Stripe.SKU do
   @spec retrieve_many(Keyword.t) :: {:ok, boolean, [t]} | {:error, Stripe.api_error_struct}
   def retrieve_many(opts \\ []) do
     query =
-      %{object: "sku"}
+      %{}
       |> Util.put_if_non_nil_opt(:starting_after, opts)
       |> Util.put_if_non_nil_opt(:ending_before, opts)
       |> Util.put_if_non_nil_opt(:limit, opts)
