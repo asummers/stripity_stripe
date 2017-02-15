@@ -137,7 +137,8 @@ defmodule Stripe.Order do
 
   @payment_schema %{
     customer: [:create, :retrieve, :update],
-    source: [:create, :retrieve, :update]
+    source: [:create, :retrieve, :update],
+    metadata: [:create, :retrieve, :update]
   }
 
   def pay(id, payment_info, opts \\ []) do
