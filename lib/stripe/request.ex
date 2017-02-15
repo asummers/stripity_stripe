@@ -28,7 +28,7 @@ defmodule Stripe.Request do
 
   @spec retrieve_many(String.t, module, Keyword.t) :: {:ok, boolean, [struct]} | {:error, Stripe.api_error_struct}
   def retrieve_many(endpoint, module, opts) do
-    case Stripe.request(:get, endpoint, %{}, %{}, opts) do
+    case Stripe.request(%{}, :get, endpoint, %{}, opts) do
       {:error, error} -> {:error, error}
       {:ok, %{"data" => data, "has_more" => has_more}} ->
         results = Enum.map(data, &Converter.stripe_map_to_struct(module, &1))
