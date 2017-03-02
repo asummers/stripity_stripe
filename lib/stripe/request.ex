@@ -130,8 +130,8 @@ defmodule Stripe.Request do
     end)
   end
 
-  defp handle_result(result, module \\ nil)
-  defp handle_result({:ok, _}, nil), do: :ok
-  defp handle_result({:ok, result = %{}}, module), do: {:ok, Converter.stripe_map_to_struct(module, result)}
-  defp handle_result({:error, error}, _), do: {:error, error}
+  def handle_result(result, module \\ nil)
+  def handle_result({:ok, _}, nil), do: :ok
+  def handle_result({:ok, result = %{}}, module), do: {:ok, Converter.stripe_map_to_struct(module, result)}
+  def handle_result({:error, error}, _), do: {:error, error}
 end
