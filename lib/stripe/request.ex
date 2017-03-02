@@ -1,6 +1,5 @@
 defmodule Stripe.Request do
   alias Stripe.Changeset
-  alias Stripe.Converter
 
   @spec create(String.t, map, map, module, Keyword.t) :: {:ok, map} | {:error, Stripe.api_error_struct}
   def create(endpoint, changes, schema, module, opts) do
